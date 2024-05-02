@@ -4,43 +4,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Count down</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap" rel="stylesheet">
+  <title>Slideshow with Countdown Timer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.css"
+    integrity="sha512-pmAAV1X4Nh5jA9m+jcvwJXFQvCBi3T17aZ1KWkqXr7g/O2YMvO8rfaa5ETWDuBvRq6fbDjlw4jHL44jNTScaKg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .hidden {
+      display: none;
+    }
+
+    body {
+      overflow: hidden;
+      font-family: "Dosis", sans-serif;
+      font-weight: 600;
+      margin: 0;
+      padding: 0;
+    }
+
+    #wrapper {
+      background-size: cover;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      color: #000;
+      position: relative;
+    }
+
+    #countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 14vw;
+    }
+
+    .slider-container {
+      opacity: 1;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .slider-container.op {
+      opacity: 0;
+    }
+
+    .slider-container img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+
+    #final {
+      opacity: 1;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #final img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+
+    #final.op {
+      opacity: 0;
+    }
+  </style>
 </head>
 
 <body>
-  <style>
-  body {
-    overflow: hidden;
-    font-family: "Dosis", sans-serif;
-    font-weight: 600;
-    margin: 0;
-    padding: 0;
-  }
 
-  #wrapper {
-    background: url("img.jpg") no-repeat;
-    background-size: cover;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    color: #fff;
-  }
-
-  #countdown {
-    text-align: center;
-    font-size: 14dvw;
-  }
-  </style>
   <div id="wrapper">
     <div id="countdown"></div>
+
+    <div class="slider-container swiper op">
+      <div class="swiper-wrapper">
+        <div class="slide swiper-slide" data-swiper-autoplay="450"><img src="1.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="400"><img src="2.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="350"><img src="3.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="300"><img src="4.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="250"><img src="5.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="200"><img src="6.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="150"><img src="7.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="100"><img src="8.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="50"><img src="9.jpg" alt=""></div>
+        <div class="slide swiper-slide" data-swiper-autoplay="0"><img src="0.jpg" alt=""></div>
+      </div>
+    </div>
+
+    <div id="final" class="op"><img src="img.jpg" alt=""></div>
   </div>
 
-  <script src="./count.js"></script>
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"
+    integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    $(function () {
+      const countdownElement = document.getElementById('countdown');
+      let count = 5;
+
+      const countdownInterval = setInterval(() => {
+        count--;
+        countdownElement.textContent = count;
+
+        if (count <= 0) {
+          clearInterval(countdownInterval);
+          countdownElement.style.display = 'none';
+
+          var swiper = new Swiper('.swiper', {
+            slidesPerView: 1,
+            autoplay: {
+              delay: 5000,
+            },
+            on: {
+              slideChange: function () {
+                if (this.isEnd) {
+                  this.autoplay.stop();
+                }
+              },
+            },
+          });
+
+          setTimeout(() => {
+            document.querySelector('.swiper').classList.add('op');
+            document.getElementById('final').classList.remove('op');
+          }, 6000);
+        }
+      }, 1000);
+    });
+
+  </script>
 </body>
 
 </html>
